@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from numpy import log2,inf,floor
+from numpy import log2,inf
 #general:
 #each element represent as line of the file.
 #all features have binary values (true or false) 
@@ -148,10 +148,11 @@ def calcConfusionMatrix(examples):
                     false_neg+=1 
     print("[["+str(true_pos)+" "+str(false_pos)+"]")
     print("[ "+str(false_neg)+" "+str(true_neg)+"]]")
-     
+    
 def main():
     file = open ('flare.csv')
     examples = [[]]
+
     for line in file:
         line = line.strip("\r\n")
         examples.append(line.split(','))
@@ -161,5 +162,6 @@ def main():
     examples.remove(attributes)
     print(calcAcc(examples))
     calcConfusionMatrix(examples)
+    file.close()
 if __name__ == '__main__':
     main()

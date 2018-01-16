@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 from sklearn.neighbors import KNeighborsClassifier
+from sfs import sfs
+import numpy as np
 
+def score(clf,x,y):
+    clf.fit(x,y)
+    return clf.score(x,y)
+    
 
 def main():
     #===start parse data
@@ -24,16 +30,18 @@ def main():
     test_set = [ x[0:len(x)-1] for x in test_set]
     neigh = KNeighborsClassifier(n_neighbors=5)
     neigh.fit(practice_set, y)
-    counter = 0
-    #check accuracy ratio
-    for i in range(len(test_set)):
-        if answers[i] == neigh.predict([test_set[i]]):
-            counter+=1
-    #q7 answer:
-    print(counter/len(test_set))
     
+    #q7p1 answer:
+    print(neigh.score(test_set,answers))
     
-    
-    
+    #q7p2
+    clf2 = KNeighborsClassifier(n_neighbors=5)
+    index_group = sfs(practice_set,y,8,clf2,score)
+    np_array_convertor = [np.array(r) for r in practice_set]
+    practice_set = [r[index_group] for r in np_array_convertor]
+    clf2.fit(practice_set,y)
+    np_array_convertor = [np.array(r) for r in test_set]
+    test_set = [r[index_group] for r in np_array_convertor]
+    print(clf2.score(test_set,answers))
 if __name__ == '__main__':
     main()

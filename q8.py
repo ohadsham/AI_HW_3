@@ -70,7 +70,6 @@ def hitRatio(tree,examples):
 #calc average accuracy of  examples 
 def calcAcc(tree,examples):    
     return hitRatio(tree,examples)/len(examples)
- 
 def main():
     file = open ('flare.csv')
     examples = [[]]
@@ -83,12 +82,11 @@ def main():
     examples.remove(attributes)
     practice_set = examples[int(len(examples)/4):]
     test_set = examples[0:int(len(examples)/4)]
-    overfit_tree = makeTree(practice_set,attributes,True,6)
-    print(str(calcAcc(overfit_tree,practice_set ))+" "+str(calcAcc(overfit_tree,test_set)))
-    under_tree = makeTree(practice_set,attributes,True,320)
-    print(str(calcAcc(under_tree,practice_set ))+" "+str(calcAcc(under_tree,test_set)))
+    tree = makeTree(practice_set,attributes,True,0)
+    print(calcAcc(tree,test_set))
+    tree = makeTree(practice_set,attributes,True,20)
+    print(calcAcc(tree,test_set))
     file.close()
 if __name__ == '__main__':
     main()
-    
 
