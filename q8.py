@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+
+from numpy import log2,inf
 # convert feature name to index in line
 def featureToIndex(feature):
     return attributes.index(feature)
@@ -27,7 +29,7 @@ def makeTree(examples,features,default,size_param):
 def selectFeature(features,examples):
     if features[0] == 'classification':
         return []   
-    return features[len(features)-2]
+    return minEntropyOfFeature(features,examples)
 
 def classify(element,tree):
     (feature,childrens,value) = tree
@@ -58,6 +60,47 @@ def majorityClass(examples):
     if total_true==0 or total_false==0:
         isAllAgree=True
     return (total_true>total_false,isAllAgree)
+
+def entropy(examples):
+    total_false = 0
+    total_true = 0
+    if(not examples):
+        return 0
+    classIndex = len(examples[0])-1
+    
+    for element in examples:
+        if element[classIndex] == 'True':
+            total_true+=1
+        else:
+            total_false+=1
+    total = total_false + total_true
+    true_entropy =total_true/total
+    false_entropy =total_false/total
+    if total_true==0:
+       return -1*(false_entropy)*log2((false_entropy)) 
+    if total_false==0:
+        return -1*(true_entropy)*log2((true_entropy))       
+    return -1*(false_entropy)*log2((false_entropy))+ -1*(true_entropy)*log2((true_entropy))
+
+#for a group of features and examples we iterate over the features and caculate for 
+#each feature the entropy of the two divide group. we return the feature with 
+#the minimum entropy. (=means the information gain is the largest)
+def minEntropyOfFeature(features,examples):
+    f_min =-1
+    minEnt = inf
+    lLen = len(examples)
+    for f in features:
+    #end of features
+      if f == 'classification':
+          return f_min
+      f_index = featureToIndex(f)
+      f0_divide = [x for x in examples if x[f_index] =='0']
+      f1_divide = [x for x in examples if x[f_index] =='1']
+      current_entropy =(len(f0_divide)/lLen) *entropy(f0_divide)+(len(f1_divide)/lLen) *entropy(f1_divide)
+      if current_entropy < minEnt:
+         minEnt = current_entropy
+         f_min = f
+    return f_min
 
 #returns successeful qualifications number
 def hitRatio(tree,examples):
