@@ -16,8 +16,6 @@ def makeTree(examples,features,default,size_param):
     c = c[0]
     f = selectFeature(features,examples) #f <- SelectFeature(Features, E)
     F = features.copy()
-    if (f not in F):
-        print(f)
     F.remove(f) #F <- Features-{f}
     
     f_index = featureToIndex(f)
@@ -126,12 +124,13 @@ def main():
     attributes = examples[0]
     examples.remove(attributes)
     practice_set = examples[int(len(examples)/4):]
-    #test_set = examples[0:int(len(examples)/4)]
-    overfit_tree = makeTree(practice_set,attributes,True,20)
-    print(str(calcAcc(overfit_tree,practice_set )) )
+    test_set = examples[0:int(len(examples)/4)]
+    overfit_tree = makeTree(practice_set,attributes,True,1)
+    print(str(calcAcc(overfit_tree,test_set )) )
     under_tree = makeTree(practice_set,attributes,True,320)
-    print(str(calcAcc(under_tree,practice_set )) )
+    print(str(calcAcc(under_tree,test_set )) )
     file.close()
+	
 if __name__ == '__main__':
     main()
     

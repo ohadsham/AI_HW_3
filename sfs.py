@@ -12,13 +12,16 @@ def sfs_inner(x, y, k, clf, score,feature_subset):
         if i in feature_subset:
             continue
         
+		# convert every sample to a numpy array:
         x_np = [np.array(r) for r in x]
+		# take only the features from feature_subset + a new feature (i):
         x_features_subset = [r[feature_subset+[i]] for r in x_np]
         
         score_rank = score(clf,x_features_subset,y)
-        if  score_rank> current_val:
+        if  score_rank > current_val:
             current_val = score_rank
             index = i
+			
     return sfs_inner(x,y,k-1,clf,score,feature_subset+[index])
 
 def sfs(x, y, k, clf, score):

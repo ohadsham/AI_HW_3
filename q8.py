@@ -16,8 +16,6 @@ def makeTree(examples,features,default,size_param):
     c = c[0]
     f = selectFeature(features,examples) #f <- SelectFeature(Features, E)
     F = features.copy()
-    if (f not in F):
-        print(f)
     F.remove(f) #F <- Features-{f}
     
     f_index = featureToIndex(f)
@@ -113,7 +111,9 @@ def hitRatio(tree,examples):
 #calc average accuracy of  examples 
 def calcAcc(tree,examples):    
     return hitRatio(tree,examples)/len(examples)
+    
 def main():
+    # parse the input data:
     file = open ('flare.csv')
     examples = [[]]
     for line in file:
@@ -123,13 +123,21 @@ def main():
     global attributes
     attributes = examples[0]
     examples.remove(attributes)
+    
+    # split the data into practice set (75%) and test set(25%):
     practice_set = examples[int(len(examples)/4):]
     test_set = examples[0:int(len(examples)/4)]
+    
+    # q8p1, a decision tree without pruning:
     tree = makeTree(practice_set,attributes,True,0)
     print(calcAcc(tree,test_set))
+    
+    # q8p2, a decision tree with pruning to leaf size of 20:
     tree = makeTree(practice_set,attributes,True,20)
     print(calcAcc(tree,test_set))
+	
     file.close()
+    
 if __name__ == '__main__':
     main()
 

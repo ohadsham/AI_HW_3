@@ -18,8 +18,6 @@ def makeTree(examples,features,default):
     c = c[0]
     f = selectFeature(features,examples) #f <- SelectFeature(Features, E)
     F = features.copy()
-    if (f not in F):
-        print(f)
     F.remove(f) #F <- Features-{f}
     
     f_index = featureToIndex(f)
@@ -163,5 +161,6 @@ def main():
     print(calcAcc(examples))
     calcConfusionMatrix(examples)
     file.close()
+	
 if __name__ == '__main__':
     main()
